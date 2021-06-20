@@ -6,18 +6,17 @@ from scipy import misc
 from lib.PraNet_Res2Net import PraNet
 from utils.dataloader import test_dataset
 
-import imageio
-
 parser = argparse.ArgumentParser()
+model_path = "" #consists of three folders named MASKS, PNG and RESULTS
+dataset_path = ""
 parser.add_argument('--testsize', type=int, default=352, help='testing size')
-parser.add_argument('--pth_path', type=str, default='snapshots/PraNet_Res2Net/PraNet-1.pth')
+parser.add_argument('--pth_path', type=str, default=model_path)
 
-for _data_name in ['PNG']:
-    data_path = './KANAMA'#/{}/'.format(_data_name)
-    save_path = './results_KANAMA/PraNet/{}/'.format(_data_name)
+for _data_name in ['PNG']:#nothing but one single loop
+    data_path = dataset_path  #'./KANAMA'#/{}/'.format(_data_name)
+    save_path = '{}/RESULTS/'.format(data_path)    #dataset_path+'/results/'#.format(_data_name)
     opt = parser.parse_args()
     model = PraNet()
-    print(opt.pth_path)
     model.load_state_dict(torch.load(opt.pth_path))
     model.cuda()
     model.eval()
@@ -38,4 +37,4 @@ for _data_name in ['PNG']:
         res = F.upsample(res, size=gt.shape, mode='bilinear', align_corners=False)
         res = res.sigmoid().data.cpu().numpy().squeeze()
         res = (res - res.min()) / (res.max() - res.min() + 1e-8)
-        imageio.imwrite(save_path+name, res)
+        misc.imsave(save_path+name, res)
