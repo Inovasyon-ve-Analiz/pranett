@@ -5,10 +5,11 @@ import os, argparse
 from scipy import misc
 from lib.PraNet_Res2Net import PraNet
 from utils.dataloader import test_dataset
+import cv2
 
 parser = argparse.ArgumentParser()
-model_path = "" #consists of three folders named MASKS, PNG and RESULTS
-dataset_path = ""
+model_path = "models/PraNet-2.pth" #consists of three folders named MASKS, PNG and RESULTS
+dataset_path = "dataset/TRAINING/KANAMA"
 parser.add_argument('--testsize', type=int, default=352, help='testing size')
 parser.add_argument('--pth_path', type=str, default=model_path)
 
@@ -37,4 +38,9 @@ for _data_name in ['PNG']:#nothing but one single loop
         res = F.upsample(res, size=gt.shape, mode='bilinear', align_corners=False)
         res = res.sigmoid().data.cpu().numpy().squeeze()
         res = (res - res.min()) / (res.max() - res.min() + 1e-8)
-        misc.imsave(save_path+name, res)
+        cv2.imwrite(save_path+name, res)#misc.imsave(save_path+name, res)
+
+for i,f in enumerate(os.listdir(save_path)):
+    img = cv2.imread(os.path.join(save_path,f),0)
+    img[img>0]=255
+    cv2.imwrite(os.path.join(save_path,f),img)
