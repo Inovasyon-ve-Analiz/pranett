@@ -41,6 +41,6 @@ for _data_name in ['PNG']:#nothing but one single loop
         cv2.imwrite(save_path+name, res)#misc.imsave(save_path+name, res)
 
 for i,f in enumerate(os.listdir(save_path)):
-    img = cv2.imread(os.path.join(save_path,f),0)
+    img = cv2.imread(os.path.join(save_path,f))
     img[img>0]=255
     cv2.imwrite(os.path.join(save_path,f),img)
