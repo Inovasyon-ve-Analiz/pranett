@@ -2,6 +2,7 @@ import numpy as np
 import SimpleITK as sitk
 from matplotlib import pyplot as plt
 import cv2
+import os
 
 def loadMask(path):
     reader = sitk.ImageFileReader()
