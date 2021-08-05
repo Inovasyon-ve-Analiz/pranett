@@ -5,11 +5,13 @@ import cv2
 import os
 
 def loadMask(path):
+    """
     reader = sitk.ImageFileReader()
     reader.SetFileName(path)
     sitkMask = reader.Execute();
     mask = sitk.GetArrayFromImage(sitkMask)
-    
+    """
+    mask = cv2.imread(path,0)
     return mask
 
 def showGrayScale(mask, title):
@@ -102,4 +104,4 @@ if __name__ == "__main__":
         iou = calculateIoU(groundtruthMask, predictedMask, showSteps = False)
         print(iou)
         sum += iou
-print(sum/len(file_names))
+#print(sum/len(file_names))
